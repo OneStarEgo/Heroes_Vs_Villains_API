@@ -48,18 +48,12 @@ def super_details(request, pk):
 
 @api_view(['GET'])
 def super_heroes(request):
-    super_type_name = request.query_params.get('type')
-    queryset = Super.objects.all()
-    if super_type_name:
-        queryset = queryset.filter(super_type__type=super_type_name)
+    queryset = Super.objects.filter(super_type__type='hero')
     serializer = SuperSerializer(queryset, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def super_villains(request):
-    super_type_name = request.query_params.get('type')
-    queryset = Super.objects.all()
-    if super_type_name:
-        queryset = queryset.filter(super_type__type=super_type_name)
+    queryset = Super.objects.filter(super_type__type='villain')
     serializer = SuperSerializer(queryset, many=True)
     return Response(serializer.data)

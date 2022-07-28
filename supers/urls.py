@@ -5,6 +5,6 @@ from . import views
 urlpatterns = [
     path('', views.supers_list),
     path('<int:pk>/', views.super_details),
-    path('?type=', views.super_heroes),
-    path('?type=', views.super_villains),
+    path('heroes/', views.super_heroes),
+    path('villains/', views.super_villains),
 ]
