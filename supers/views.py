@@ -11,16 +11,18 @@ from rest_framework import status
 @api_view(['GET', 'POST'])
 def supers_list(request):
     if request.method == 'GET':
-        super_type_name = request.query_params.get('type')
-        print(super_type_name)
 
-        queryset = Super.objects.all()
+        super_hero= Super.objects.filter(super_type__type='Hero')
+        super_villain = Super.objects.filter(super_type__type='Villain')
 
-        if super_type_name:
-            queryset = queryset.filter(super_type__type=super_type_name)
+        hero_serializer = SuperSerializer(super_hero, many=True)
+        villain_serializer = SuperSerializer(super_villain, many=True)
 
-        serializer = SuperSerializer(queryset, many=True)
-        return Response(serializer.data)
+        custom_response_dict = {
+            'Heroes': hero_serializer.data,
+            'Villains': villain_serializer.data
+        }
+        return Response(custom_response_dict)
 
     elif request.method =='POST':
         serializer = SuperSerializer(data=request.data)
@@ -48,10 +50,8 @@ def super_details(request, pk):
 def super_heroes(request):
     super_type_name = request.query_params.get('type')
     queryset = Super.objects.all()
-
     if super_type_name:
         queryset = queryset.filter(super_type__type=super_type_name)
-
     serializer = SuperSerializer(queryset, many=True)
     return Response(serializer.data)
 
@@ -59,9 +59,7 @@ def super_heroes(request):
 def super_villains(request):
     super_type_name = request.query_params.get('type')
     queryset = Super.objects.all()
-
     if super_type_name:
         queryset = queryset.filter(super_type__type=super_type_name)
-
     serializer = SuperSerializer(queryset, many=True)
     return Response(serializer.data)
